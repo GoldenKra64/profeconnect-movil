@@ -37,13 +37,12 @@ fun RegisterScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     val fileLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         val fileName = uri?.let { u ->
             context.contentResolver.query(u, null, null, null, null)?.use { cursor ->
                 val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-                cursor.moveToFirst()
-                if (nameIndex >= 0) cursor.getString(nameIndex) else null
+                if (cursor.moveToFirst() && nameIndex >= 0) cursor.getString(nameIndex) else null
             }
         }
         viewModel.onCedulaPhotoSelected(uri, fileName)
@@ -58,7 +57,7 @@ fun RegisterScreen(
         onPasswordConfirmChange = viewModel::onPasswordConfirmChange,
         onAreaChange = viewModel::onAreaChange,
         onDescriptionChange = viewModel::onDescriptionChange,
-        onPickFile = { fileLauncher.launch("*/*") },
+        onPickFile = { fileLauncher.launch(arrayOf("image/*", "application/pdf")) },
         onSubmit = { viewModel.enviarSolicitud() },
         onDismissResult = viewModel::resetResult,
         onNavigateBack = onNavigateBack

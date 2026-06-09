@@ -38,7 +38,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     fun onEmailChange(value: String) = _uiState.update {
         it.copy(
             institutionalEmail = value,
-            emailError = if (value.isNotBlank() && !value.contains('@')) "Correo institucional inválido" else null
+            emailError = if (value.isNotBlank() && !isValidEmail(value)) "Correo institucional inválido" else null
         )
     }
 
@@ -54,7 +54,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     fun onPasswordConfirmChange(value: String) = _uiState.update {
         it.copy(
             passwordConfirm = value,
-            passwordConfirmError = if (value != it.password) "Las contraseñas no coinciden" else null
+            passwordConfirmError = if (value.isNotBlank() && value != it.password) "Las contraseñas no coinciden" else null
         )
     }
 
@@ -111,13 +111,29 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             s.copy(
                 firstNameError = if (state.firstName.isBlank()) { valid = false; "El nombre es obligatorio" } else null,
                 lastNameError = if (state.lastName.isBlank()) { valid = false; "El apellido es obligatorio" } else null,
-                emailError = if (!state.institutionalEmail.contains('@')) { valid = false; "Correo institucional inválido" } else null,
-                passwordError = if (state.password.length < 8) { valid = false; "Mínimo 8 caracteres" } else null,
-                passwordConfirmError = if (state.password != state.passwordConfirm) { valid = false; "Las contraseñas no coinciden" } else null,
+                emailError = when {
+                    state.institutionalEmail.isBlank() -> { valid = false; "El correo es obligatorio" }
+                    !isValidEmail(state.institutionalEmail) -> { valid = false; "Correo institucional inválido" }
+                    else -> null
+                },
+                passwordError = when {
+                    state.password.isBlank() -> { valid = false; "La contraseña es obligatoria" }
+                    state.password.length < 8 -> { valid = false; "Mínimo 8 caracteres" }
+                    else -> null
+                },
+                passwordConfirmError = when {
+                    state.passwordConfirm.isBlank() -> { valid = false; "Confirma tu contraseña" }
+                    state.password != state.passwordConfirm -> { valid = false; "Las contraseñas no coinciden" }
+                    else -> null
+                },
                 cedulaPhotoError = if (state.cedulaPhotoUri == null) { valid = false; "Debe adjuntar una foto de cédula" } else null
             )
         }
         return valid
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()
     }
 
     private fun uriToTempFile(uri: Uri): File? {
