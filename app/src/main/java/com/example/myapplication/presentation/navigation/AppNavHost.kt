@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.myapplication.presentation.chat.ChatScreen
+import com.example.myapplication.presentation.register.RegisterScreen
 
 @Composable
 fun AppNavHost(
@@ -23,24 +24,32 @@ fun AppNavHost(
         composable<Feed> {
             HomeScreen(
                 onMenuClick = openDrawer
-            );
+            )
         }
-         */
-        composable<Chat>{
+        */
+
+        composable<Chat> {
             ChatScreen(
                 onMenuClick = openDrawer
-            );
+            )
+        }
+
+        composable<Register> {
+            RegisterScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         /*
-        composable<Profiles> {
+        composable<Profile> {
             ProfileScreen(
                 onMenuClick = openDrawer
-            );
+            )
         }
 
-         composable<ExitToScreen> {
+        composable<CloseSession> {
             // JWT Exit Function
+        }
         */
     }
 }

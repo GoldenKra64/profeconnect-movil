@@ -15,6 +15,9 @@ object Chat
 object Profile
 
 @Serializable
+object Register
+
+@Serializable
 object CloseSession
 
 val drawerItems = listOf(
@@ -32,6 +35,11 @@ val drawerItems = listOf(
         icon = Icons.Default.Person,
         title = "Perfil",
         route = Profile
+    ),
+    DrawerItem(
+        icon = Icons.Default.PersonAdd,
+        title = "Registro Docente",
+        route = Register
     ),
     DrawerItem(
         icon = Icons.AutoMirrored.Filled.ExitToApp,
