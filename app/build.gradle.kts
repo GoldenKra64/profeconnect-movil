@@ -50,8 +50,8 @@ android {
 }
 
 dependencies {
-
     implementation("io.socket:socket.io-client:2.1.1")
+    implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.androidx.core.ktx)
     implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation("com.github.jeziellago:compose-markdown:0.7.2")
+    implementation(libs.androidx.foundation.layout.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -26,7 +26,6 @@ class ChatViewModel(
 
     init {
         repository.connect()
-        Log.d("Chatbot", "Conectado");
         listenForMessages()
     }
 
