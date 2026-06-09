@@ -13,9 +13,9 @@ interface RegistrationRequestDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: RegistrationRequestEntity)
 
-    @Query("SELECT * FROM solicitudes_registro ORDER BY createdAt DESC")
+    @Query("SELECT * FROM solicitudes_registro ORDER BY created_at DESC")
     fun observarTodas(): Flow<List<RegistrationRequestEntity>>
 
-    @Query("SELECT * FROM solicitudes_registro WHERE status = :status ORDER BY createdAt DESC")
+    @Query("SELECT * FROM solicitudes_registro WHERE status = :status ORDER BY created_at DESC")
     fun observarPorEstado(status: String): Flow<List<RegistrationRequestEntity>>
 }
