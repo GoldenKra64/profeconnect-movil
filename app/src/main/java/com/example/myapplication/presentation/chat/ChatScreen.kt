@@ -24,6 +24,7 @@ import dev.jeziellago.compose.markdowntext.MarkdownText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
+    onMenuClick: () -> Unit,
     viewModel: ChatViewModel = viewModel()
 ) {
     val messages by viewModel.messages.collectAsState()
@@ -35,7 +36,7 @@ fun ChatScreen(
             TopAppBar(
                 title = { Text("Chatbot") },
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Lógica del Shell */ }) {
+                    IconButton(onClick = onMenuClick) {
                         Icon(Icons.Filled.Menu, contentDescription = "Menu")
                     }
                 },
