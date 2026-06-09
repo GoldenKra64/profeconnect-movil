@@ -10,7 +10,8 @@ import com.example.myapplication.presentation.chat.ChatScreen
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    openDrawer: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -18,23 +19,28 @@ fun AppNavHost(
         modifier = modifier
     ) {
 
+        /*
+        composable<Feed> {
+            HomeScreen(
+                onMenuClick = openDrawer
+            );
+        }
+         */
         composable<Chat>{
             ChatScreen(
                 onMenuClick = openDrawer
             );
         }
+
         /*
-        composable<Home> {
-            HomeScreen()
+        composable<Profiles> {
+            ProfileScreen(
+                onMenuClick = openDrawer
+            );
         }
 
-        composable<Profile> {
-            ProfileScreen()
-        }
-
-        composable<Settings> {
-            SettingsScreen()
-        }
+         composable<ExitToScreen> {
+            // JWT Exit Function
         */
     }
 }

@@ -51,6 +51,7 @@ android {
 
 dependencies {
     implementation("io.socket:socket.io-client:2.1.1")
+    implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.androidx.core.ktx)
     implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
