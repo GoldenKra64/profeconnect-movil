@@ -31,7 +31,7 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        
+
         buildConfigField("String", "CHATBOT_URL", "\"$chatbotUrl\"")
         buildConfigField("String", "API_URL", "\"$apiUrl\"")
     }
@@ -53,7 +53,6 @@ android {
 }
 
 dependencies {
-
     implementation("io.socket:socket.io-client:2.1.1")
     implementation(libs.androidx.core.ktx)
     implementation("androidx.navigation:navigation-compose:2.9.0")
@@ -71,6 +70,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation("com.github.jeziellago:compose-markdown:0.7.2")
+    implementation(libs.androidx.foundation.layout.android)
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

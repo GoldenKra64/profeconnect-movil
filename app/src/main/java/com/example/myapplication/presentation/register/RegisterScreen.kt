@@ -23,7 +23,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.domain.model.RegistrationResult
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
@@ -34,13 +33,7 @@ fun RegisterScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val viewModel: RegisterViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
-                RegisterViewModel(context) as T
-        }
-    )
+    val viewModel: RegisterViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     val fileLauncher = rememberLauncherForActivityResult(
@@ -66,7 +59,7 @@ fun RegisterScreen(
         onAreaChange = viewModel::onAreaChange,
         onDescriptionChange = viewModel::onDescriptionChange,
         onPickFile = { fileLauncher.launch("*/*") },
-        onSubmit = { viewModel.enviarSolicitud(context) },
+        onSubmit = { viewModel.enviarSolicitud() },
         onDismissResult = viewModel::resetResult,
         onNavigateBack = onNavigateBack
     )

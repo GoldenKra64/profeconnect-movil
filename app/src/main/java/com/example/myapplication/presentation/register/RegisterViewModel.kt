@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.register
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.local.AppDatabase
 import com.example.myapplication.data.remote.RetrofitClient
@@ -17,9 +17,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RegisterViewModel(context: Context) : ViewModel() {
+class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val dao = AppDatabase.getInstance(context).registrationRequestDao()
+    private val dao = AppDatabase.getInstance(application).registrationRequestDao()
     private val useCase = RegisterDocenteUseCase(
         RegistrationRepositoryImpl(RetrofitClient.authApi, dao)
     )
@@ -72,14 +72,15 @@ class RegisterViewModel(context: Context) : ViewModel() {
 
     fun resetResult() = _uiState.update { it.copy(submissionResult = RegistrationResult.Idle) }
 
-    fun enviarSolicitud(context: Context) {
+    fun enviarSolicitud() {
         val state = _uiState.value
         if (!validate(state)) return
+        val context = getApplication<Application>()
 
         viewModelScope.launch {
             _uiState.update { it.copy(submissionResult = RegistrationResult.Loading) }
 
-            val tempFile = uriToTempFile(context, state.cedulaPhotoUri!!)
+            val tempFile = uriToTempFile(state.cedulaPhotoUri!!)
             if (tempFile == null) {
                 _uiState.update {
                     it.copy(submissionResult = RegistrationResult.Error("No se pudo leer el archivo de cédula"))
@@ -119,8 +120,9 @@ class RegisterViewModel(context: Context) : ViewModel() {
         return valid
     }
 
-    private fun uriToTempFile(context: Context, uri: Uri): File? {
+    private fun uriToTempFile(uri: Uri): File? {
         return try {
+            val context = getApplication<Application>()
             val inputStream = context.contentResolver.openInputStream(uri) ?: return null
             val tempFile = File.createTempFile("cedula_", ".tmp", context.cacheDir)
             tempFile.outputStream().use { inputStream.copyTo(it) }

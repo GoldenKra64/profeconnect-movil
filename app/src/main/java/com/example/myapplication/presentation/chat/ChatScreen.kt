@@ -24,28 +24,14 @@ import dev.jeziellago.compose.markdowntext.MarkdownText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
+    onMenuClick: () -> Unit,
     viewModel: ChatViewModel = viewModel()
 ) {
     val messages by viewModel.messages.collectAsState()
     val isWaiting by viewModel.isWaiting.collectAsState()
     var textState by remember { mutableStateOf(TextFieldValue("")) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Chatbot") },
-                navigationIcon = {
-                    IconButton(onClick = { /* TODO: Lógica del Shell */ }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        }
-    ) { paddingValues ->
+    Scaffold() { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
