@@ -30,10 +30,10 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @Composable
 fun RegisterScreen(
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    viewModel: RegisterViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val viewModel: RegisterViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     val fileLauncher = rememberLauncherForActivityResult(
