@@ -14,7 +14,7 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 val chatbotUrl: String = localProperties.getProperty("SOCKET_URL") ?: "http://localhost:3000/chatbot"
-val apiUrl: String = localProperties.getProperty("API_URL") ?: "https://profeconnect-backend.up.railway.app/api/v1"
+val apiUrl: String = localProperties.getProperty("API_URL") ?: "http://localhost:3000/api/V1"
 
 // Para el resto del equipo, usen API_URL, ya esta configurado con todo y la version
 
