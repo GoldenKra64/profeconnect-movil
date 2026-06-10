@@ -23,24 +23,26 @@ fun AppNavHost(
         composable<Feed> {
             HomeScreen(
                 onMenuClick = openDrawer
-            );
+            )
         }
-         */
-        composable<Chat>{
+        */
+
+        composable<Chat> {
             ChatScreen(
                 onMenuClick = openDrawer
-            );
+            )
         }
 
         /*
-        composable<Profiles> {
+        composable<Profile> {
             ProfileScreen(
                 onMenuClick = openDrawer
-            );
+            )
         }
 
-         composable<ExitToScreen> {
+        composable<CloseSession> {
             // JWT Exit Function
+        }
         */
     }
 }

@@ -25,22 +25,18 @@ class ChatSocketManager {
     }
 
     fun setOnMessageReceivedListener(listener: (String) -> Unit) {
-        Log.d("Chatbot", "Listener configurado");
         onMessageReceived = listener
     }
 
     fun connect() {
         socket?.on(Socket.EVENT_CONNECT) {
-            Log.d("Chatbot", "Conectado a Socket.io")
         }?.on("chat:response") { args ->
             if (args.isNotEmpty()) {
                 val msg = args[0] as JSONObject
                 val content = msg.getString("message").toString()
-                Log.d("Chatbot", "Mensaje recibido: $content")
                 onMessageReceived?.invoke(content)
             }
         }?.on(Socket.EVENT_DISCONNECT) {
-            Log.d("Chatbot", "Desconectado de Socket.io")
         }
         socket?.connect()
     }
