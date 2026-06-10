@@ -31,6 +31,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 @Composable
 fun RegisterScreen(
     onNavigateBack: () -> Unit = {},
+    showBackNavigation: Boolean = false,
     viewModel: RegisterViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -60,7 +61,8 @@ fun RegisterScreen(
         onPickFile = { fileLauncher.launch(arrayOf("image/*", "application/pdf")) },
         onSubmit = { viewModel.enviarSolicitud() },
         onDismissResult = viewModel::resetResult,
-        onNavigateBack = onNavigateBack
+        onNavigateBack = onNavigateBack,
+        showBackNavigation = showBackNavigation
     )
 }
 
@@ -80,7 +82,8 @@ fun RegisterContent(
     onPickFile: () -> Unit,
     onSubmit: () -> Unit,
     onDismissResult: () -> Unit,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    showBackNavigation: Boolean = false
 ) {
     val isLoading = uiState.submissionResult is RegistrationResult.Loading
 
@@ -89,11 +92,13 @@ fun RegisterContent(
             TopAppBar(
                 title = { Text("Solicitud de Registro") },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver"
-                        )
+                    if (showBackNavigation) {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Volver"
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
