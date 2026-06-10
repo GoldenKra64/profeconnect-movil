@@ -8,9 +8,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-
-    private const val DEFAULT_BASE_URL = "https://profeconnect-backend.up.railway.app/api/v1/"
-
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -21,7 +18,7 @@ object RetrofitClient {
 
     private fun resolvedBaseUrl(): String {
         val raw = BuildConfig.API_URL.trim().removeSurrounding("\"")
-        val base = raw.ifBlank { DEFAULT_BASE_URL.removeSuffix("/") }
+        val base = raw.ifBlank { BuildConfig.API_URL.removeSuffix("/") }
         return if (base.endsWith("/")) base else "$base/"
     }
 
