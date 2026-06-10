@@ -9,6 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
+    private const val DEFAULT_BASE_URL = "https://profeconnect-backend.up.railway.app/api/v1/"
+
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -17,11 +19,19 @@ object RetrofitClient {
         .addInterceptor(loggingInterceptor)
         .build()
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("${BuildConfig.API_URL}/")
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private fun resolvedBaseUrl(): String {
+        val raw = BuildConfig.API_URL.trim().removeSurrounding("\"")
+        val base = raw.ifBlank { DEFAULT_BASE_URL.removeSuffix("/") }
+        return if (base.endsWith("/")) base else "$base/"
+    }
 
-    val authApi: AuthApi = retrofit.create(AuthApi::class.java)
+    private val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(resolvedBaseUrl())
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    val authApi: AuthApi by lazy { retrofit.create(AuthApi::class.java) }
 }
