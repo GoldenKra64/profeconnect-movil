@@ -4,7 +4,6 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.data.local.AppDatabase
 import com.example.myapplication.data.remote.RetrofitClient
 import com.example.myapplication.data.repository.RegistrationRepositoryImpl
 import com.example.myapplication.domain.model.DocenteRegistration
@@ -19,9 +18,8 @@ import java.io.File
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val dao = AppDatabase.getInstance(application).registrationRequestDao()
     private val useCase = RegisterDocenteUseCase(
-        RegistrationRepositoryImpl(RetrofitClient.authApi, dao)
+        RegistrationRepositoryImpl(RetrofitClient.authApi)
     )
 
     private val _uiState = MutableStateFlow(RegisterUiState())

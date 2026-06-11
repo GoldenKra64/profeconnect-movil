@@ -1,14 +1,12 @@
 package com.example.myapplication.data.repository
 
-import com.example.myapplication.data.local.dao.RegistrationRequestDao
-import com.example.myapplication.data.local.entity.RegistrationRequestEntity
 import com.example.myapplication.data.remote.api.AuthApi
 import com.example.myapplication.domain.model.DocenteRegistration
 import com.example.myapplication.domain.model.RegistrationResult
 import com.example.myapplication.domain.repository.RegistrationRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -17,8 +15,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class RegistrationRepositoryImpl(
-    private val authApi: AuthApi,
-    private val dao: RegistrationRequestDao
+    private val authApi: AuthApi
 ) : RegistrationRepository {
 
     override suspend fun enviarSolicitud(
@@ -50,16 +47,6 @@ class RegistrationRepositoryImpl(
             )
 
             if (response.success) {
-                dao.insert(
-                    RegistrationRequestEntity(
-                        institutionalEmail = docente.institutionalEmail,
-                        firstName = docente.firstName,
-                        lastName = docente.lastName,
-                        area = docente.area,
-                        description = docente.description,
-                        status = "PENDIENTE"
-                    )
-                )
                 RegistrationResult.Success(response.message)
             } else {
                 RegistrationResult.Error(response.message)
@@ -69,16 +56,5 @@ class RegistrationRepositoryImpl(
         }
     }
 
-    override fun observarSolicitudesLocales(): Flow<List<DocenteRegistration>> =
-        dao.observarTodas().map { entities ->
-            entities.map { entity ->
-                DocenteRegistration(
-                    firstName = entity.firstName,
-                    lastName = entity.lastName,
-                    institutionalEmail = entity.institutionalEmail,
-                    area = entity.area,
-                    description = entity.description
-                )
-            }
-        }
+    override fun observarSolicitudesLocales(): Flow<List<DocenteRegistration>> = flowOf(emptyList())
 }
