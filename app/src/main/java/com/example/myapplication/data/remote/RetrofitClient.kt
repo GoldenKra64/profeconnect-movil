@@ -2,6 +2,7 @@ package com.example.myapplication.data.remote
 
 import com.example.myapplication.BuildConfig
 import com.example.myapplication.data.remote.api.AuthApi
+import com.example.myapplication.data.remote.api.ProfileApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -31,4 +32,5 @@ object RetrofitClient {
     }
 
     val authApi: AuthApi by lazy { retrofit.create(AuthApi::class.java) }
+    val profileApi: ProfileApi by lazy { retrofit.create(ProfileApi::class.java) }
 }
