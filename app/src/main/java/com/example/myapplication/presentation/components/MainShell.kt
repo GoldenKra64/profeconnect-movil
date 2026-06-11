@@ -19,11 +19,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.presentation.navigation.AppNavHost
+import com.example.myapplication.presentation.navigation.CloseSession
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainShell() {
+fun MainShell(
+    onLogout: () -> Unit = {}
+) {
     val navController = rememberNavController()
 
     val drawerState = rememberDrawerState(
@@ -38,9 +41,13 @@ fun MainShell() {
             AppDrawer(
                 currentRoute = null,
                 onDestinationClick = { destination ->
-                    navController.navigate(destination)
                     scope.launch {
                         drawerState.close()
+                    }
+                    if (destination == CloseSession) {
+                        onLogout()
+                    } else {
+                        navController.navigate(destination)
                     }
                 }
             )

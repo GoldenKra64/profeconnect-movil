@@ -1,6 +1,7 @@
 package com.example.myapplication.data.remote
 
 import com.example.myapplication.BuildConfig
+import com.example.myapplication.data.local.AuthSessionStorage
 import com.example.myapplication.data.remote.api.AuthApi
 import com.example.myapplication.data.remote.api.ProfileApi
 import okhttp3.OkHttpClient
@@ -13,7 +14,26 @@ object RetrofitClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    private val authInterceptor = okhttp3.Interceptor { chain ->
+        val request = chain.request()
+        val encodedPath = request.url.encodedPath
+        val isPublicAuthEndpoint = encodedPath.endsWith("/auth/login") ||
+            encodedPath.endsWith("/auth/register-request")
+        val token = AuthSessionStorage.getToken()
+
+        val authenticatedRequest = if (!isPublicAuthEndpoint && token != null) {
+            request.newBuilder()
+                .header("Authorization", "Bearer $token")
+                .build()
+        } else {
+            request
+        }
+
+        chain.proceed(authenticatedRequest)
+    }
+
     private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor)
         .build()
 
