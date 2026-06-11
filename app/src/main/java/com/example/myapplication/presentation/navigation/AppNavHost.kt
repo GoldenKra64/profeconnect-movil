@@ -33,16 +33,23 @@ fun AppNavHost(
             )
         }
 
-        /*
         composable<Profile> {
-            ProfileScreen(
-                onMenuClick = openDrawer
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val application = context.applicationContext as android.app.Application
+            val viewModel: com.example.myapplication.presentation.profile.ProfileViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+                factory = com.example.myapplication.presentation.profile.ProfileViewModel.Factory(application)
+            )
+
+            com.example.myapplication.presentation.profile.ProfileScreen(
+                viewModel = viewModel
             )
         }
 
+        /*
         composable<CloseSession> {
             // JWT Exit Function
         }
         */
     }
 }
+

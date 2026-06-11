@@ -1,8 +1,13 @@
 package com.example.myapplication.presentation.profile
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.data.local.AppDatabase
+import com.example.myapplication.data.local.AuthSessionStorage
+import com.example.myapplication.data.remote.RetrofitClient
+import com.example.myapplication.data.repository.ProfileRepositoryImpl
 import com.example.myapplication.domain.usecase.GetProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,21 +22,13 @@ class ProfileViewModel(
     private val _state = MutableStateFlow(ProfileState())
     val state: StateFlow<ProfileState> = _state.asStateFlow()
 
-    // Este token temporalmente está en blanco o puede ser reemplazado
-    fun getProfile(token: String = "") {
+    fun getProfile() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            // Simulamos datos de prueba mientras no tengamos un token real
-            if (token.isBlank()) {
-                val mockProfile = com.example.myapplication.domain.model.Profile(
-                    id = 1,
-                    institutionalEmail = "admin@institucion.edu.ec",
-                    firstName = "Administrador",
-                    lastName = "Sistema",
-                    role = "admin",
-                    profileImage = null
-                )
-                _state.update { it.copy(isLoading = false, profile = mockProfile) }
+            
+            val token = AuthSessionStorage.getToken()
+            if (token.isNullOrBlank()) {
+                _state.update { it.copy(isLoading = false, error = "No hay sesión activa.") }
                 return@launch
             }
 
@@ -46,11 +43,16 @@ class ProfileViewModel(
     }
 
     class Factory(
-        private val getProfileUseCase: GetProfileUseCase
+        private val application: Application
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ProfileViewModel(getProfileUseCase) as T
+            val database = AppDatabase.getDatabase(application)
+            val repository = ProfileRepositoryImpl(
+                api = RetrofitClient.profileApi,
+                dao = database.profileDao()
+            )
+            return ProfileViewModel(GetProfileUseCase(repository)) as T
         }
     }
 }
