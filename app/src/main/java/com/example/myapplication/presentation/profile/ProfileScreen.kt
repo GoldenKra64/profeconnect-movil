@@ -37,17 +37,16 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.colorScheme.background)
         ) {
             when {
                 state.isLoading -> {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 state.error != null -> {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.align(Alignment.Center).padding(16.dp)
                     ) {
                         Text(
                             text = "Error de la API:",
@@ -70,6 +69,7 @@ fun ProfileScreen(
                     val profile = state.profile!!
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
