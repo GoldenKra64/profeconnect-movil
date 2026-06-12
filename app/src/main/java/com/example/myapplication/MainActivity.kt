@@ -13,6 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         AuthSessionStorage.initialize(applicationContext)
+        com.example.myapplication.data.local.AppDatabase.getInstance(applicationContext)
 
         setContent {
             MyApplicationTheme {

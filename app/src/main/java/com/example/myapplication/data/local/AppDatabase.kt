@@ -9,6 +9,8 @@ import com.example.myapplication.data.local.entity.AttachmentEntity
 import com.example.myapplication.data.local.entity.PublicationEntity
 import com.example.myapplication.data.local.entity.PublicationTagCrossRef
 import com.example.myapplication.data.local.entity.TagEntity
+import com.example.myapplication.data.local.dao.ProfileDao
+import com.example.myapplication.data.local.entity.ProfileEntity
 
 @Database(
     entities = [
@@ -16,7 +18,8 @@ import com.example.myapplication.data.local.entity.TagEntity
         PublicationEntity::class,
         AttachmentEntity::class,
         TagEntity::class,
-        PublicationTagCrossRef::class
+        PublicationTagCrossRef::class,
+        ProfileEntity::class
     ],
     version = 2,
     exportSchema = false
@@ -25,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     // Exponemos tu DAO
     abstract fun feedDao(): FeedDao
+    abstract fun profileDao(): ProfileDao
 
     companion object {
         @Volatile
