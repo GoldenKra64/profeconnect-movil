@@ -42,6 +42,7 @@ android {
 
         buildConfigField("String", "CHATBOT_URL", "\"$chatbotUrl\"")
         buildConfigField("String", "API_URL", "\"$apiUrl\"")
+        buildConfigField("String", "API_URL", "\"https://profeconnect-backend.up.railway.app/api/v1/\"")
     }
 
     compileOptions {

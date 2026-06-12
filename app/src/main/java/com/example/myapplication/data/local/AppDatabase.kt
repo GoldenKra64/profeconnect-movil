@@ -4,29 +4,41 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.myapplication.data.local.dao.ProfileDao
-import com.example.myapplication.data.local.entity.ProfileEntity
+import com.example.myapplication.data.local.dao.FeedDao
+import com.example.myapplication.data.local.entity.AttachmentEntity
+import com.example.myapplication.data.local.entity.PublicationEntity
+import com.example.myapplication.data.local.entity.PublicationTagCrossRef
+import com.example.myapplication.data.local.entity.TagEntity
 
-@Database(entities = [ProfileEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        // Tus tablas exclusivas para el Feed:
+        PublicationEntity::class,
+        AttachmentEntity::class,
+        TagEntity::class,
+        PublicationTagCrossRef::class
+    ],
+    version = 2,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun profileDao(): ProfileDao
+    // Exponemos tu DAO
+    abstract fun feedDao(): FeedDao
 
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "profeconnect_database"
+                    "profeconnect_test.db" // Base de datos temporal para tus pruebas
                 )
-                .fallbackToDestructiveMigration()
-                .build()
-                INSTANCE = instance
-                instance
+                    .fallbackToDestructiveMigration()
+                    .build().also { INSTANCE = it }
             }
         }
     }

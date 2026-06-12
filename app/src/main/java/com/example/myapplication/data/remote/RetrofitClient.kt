@@ -3,6 +3,7 @@ package com.example.myapplication.data.remote
 import com.example.myapplication.BuildConfig
 import com.example.myapplication.data.local.AuthSessionStorage
 import com.example.myapplication.data.remote.api.AuthApi
+import com.example.myapplication.data.remote.api.FeedApi
 import com.example.myapplication.data.remote.api.ProfileApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -38,9 +39,7 @@ object RetrofitClient {
         .build()
 
     private fun resolvedBaseUrl(): String {
-        val raw = BuildConfig.API_URL.trim().removeSurrounding("\"")
-        val base = raw.ifBlank { BuildConfig.API_URL.removeSuffix("/") }
-        return if (base.endsWith("/")) base else "$base/"
+        return "https://profeconnect-backend.up.railway.app/api/v1/"
     }
 
     private val retrofit: Retrofit by lazy {
@@ -53,4 +52,6 @@ object RetrofitClient {
 
     val authApi: AuthApi by lazy { retrofit.create(AuthApi::class.java) }
     val profileApi: ProfileApi by lazy { retrofit.create(ProfileApi::class.java) }
+    val feedApi: FeedApi by lazy { retrofit.create(FeedApi::class.java) }
 }
+

@@ -10,3 +10,6 @@ data object RegisterRoute
 
 @Serializable
 data object AppShellRoute
+
+@Serializable
+data object FeedRoute
